@@ -10,7 +10,7 @@ import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { catchError, map, tap } from 'rxjs/operators';
-
+  
 @Injectable({
   providedIn: 'root'
 })
@@ -43,7 +43,9 @@ export class HeroService {
     this.messageService.add(`HeroService: ${message}`);
   }
 
-  private heroesUrl = 'api/heroes';  // URL to web api
+  // private heroesUrl = 'api/heroes';  // URL to web api
+
+  private heroesUrl = 'http://localhost:3000/heroes';  // URL to web api
 
   /**
    * Handle Http operation that failed.
@@ -86,15 +88,17 @@ export class HeroService {
   }
 
   /** DELETE: delete the hero from the server */
-  deleteHero(hero: Hero | number): Observable<Hero> {
-    const id = typeof hero === 'number' ? hero : hero.id;
-    const url = `${this.heroesUrl}/${id}`;
+   /** DELETE: delete the hero from the server */
+   deleteHero(hero: Hero ): Observable<Hero> {
+    // const id = typeof hero === 'number' ? hero : hero.id;
+    const name = typeof hero === 'string' ? hero : hero.name;
+    const url = `${this.heroesUrl}/${name}`;
 
     return this.http.delete<Hero>(url, this.httpOptions).pipe(
-      tap(_ => this.log(`deleted hero id=${id}`)),
+      tap(_ => this.log(`deleted hero name=${name}`)),
       catchError(this.handleError<Hero>('deleteHero'))
     );
-  }
+}
 
   /* GET heroes whose name contains search term */
 searchHeroes(term: string): Observable<Hero[]> {
